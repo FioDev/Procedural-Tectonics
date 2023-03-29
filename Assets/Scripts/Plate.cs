@@ -2,17 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Plate : MonoBehaviour
+[System.Serializable]
+public class Plate
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public float[,] heightMap;
 
-    // Update is called once per frame
-    void Update() 
-    {
-        
-    }
+    public int seed;
+    public Vector2 speed;
+    public Vector2 offset;
 }
