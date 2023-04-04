@@ -5,6 +5,8 @@ It is designed to provide a platform for generating and viewing replicatable exa
 
 Currently, the simulation is capable of generating set dimensions of terrain at a time. The exact dimensions of which can be selected from the generation menu before the simulation begins. 
 
+Users wishing to participate in a study related to this program, its outputs, and its usability with various individuals on various systems are invited to participate at their own leisure while the study remains open. An informed consent form can be distributed by @FioDev on request, after which a link to the studies' questionaire will be provided. 
+
 ## Controls
 
 The following keybinds should be read to understanding to operate the simulation effectivley.
