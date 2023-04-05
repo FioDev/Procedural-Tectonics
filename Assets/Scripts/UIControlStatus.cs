@@ -46,6 +46,16 @@ public class UIControlStatus : MonoBehaviour
         }
     }
 
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void Show()
+    {
+        gameObject.SetActive(true);
+    }
+
     public void UpdateStatus(string newStatus)
     {
         status = newStatus;

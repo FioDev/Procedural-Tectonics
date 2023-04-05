@@ -56,7 +56,7 @@ public class Lithosphere : MonoBehaviour
     [Range(0, 1)] public float erosionFactor;
     [Range(0, 1)] public float volcanismFactor;
 
-    public Plate[] plates;
+    public List<Plate> plates;
 
     bool stepGeneration = false;
     bool smoothOnly = false;
@@ -67,6 +67,7 @@ public class Lithosphere : MonoBehaviour
     //Set up references to UI controlers
     public UIControlStatus statusUI;
     public UIControlSettings settingsUI;
+    public CameraOrbit cam;
 
 
     private void Awake()
@@ -77,7 +78,7 @@ public class Lithosphere : MonoBehaviour
         {
             //Generate initial terrain data for plates
             
-            for (int i = 0; i < plates.Length; i++)
+            for (int i = 0; i < plates.Count; i++)
             {
                 plates[i] = UpdatePlateData(plates[i]);
             }
@@ -177,7 +178,7 @@ public class Lithosphere : MonoBehaviour
             display.DrawMesh(MeshGenerator.GenerateTerrainMesh(heightMap, meshHeightMultiplier, meshHeightCurve), TextureGenerator.TextureFromColourMap(colourMap, mapWidth, mapDepth));
         }
 
-        if (!stepGeneration && !smoothOnly)
+        if (!stepGeneration && !smoothOnly && !cam.hideGenUI)
         {
             //make sure UI is broadcasting correct Status
             statusUI.UpdateStatus("idle");
@@ -185,6 +186,18 @@ public class Lithosphere : MonoBehaviour
         }
 
     }
+
+    public void ApplySizeChange(int x, int y)
+    {
+        mapDepth = y;
+        mapWidth = x;
+
+        drawMode = DrawMode.Mesh;
+        GenerateSurface();
+        drawMode = DrawMode.TectonicMesh;
+    }
+
+
 
     public Plate UpdatePlateData(Plate plate)
     {
@@ -230,7 +243,7 @@ public class Lithosphere : MonoBehaviour
         processed = PreTectonicErosion(processed);
 
         //Then, update plate movement data
-        for (int i = 0; i < plates.Length; i++)
+        for (int i = 0; i < plates.Count; i++)
         {
             plates[i] = UpdatePlateData(plates[i]);
         }
@@ -347,10 +360,10 @@ public class Lithosphere : MonoBehaviour
         //For each plate, look to see if two are going in even *glancingly* oposite directions.
         
         //plate origin
-        for (int i = 0; i < plates.Length; i++)
+        for (int i = 0; i < plates.Count; i++)
         {
             //plate to compare
-            for (int j = 0; j < plates.Length; j++)
+            for (int j = 0; j < plates.Count; j++)
             {
                 if (i == j)
                 {
@@ -457,7 +470,7 @@ public class Lithosphere : MonoBehaviour
 
         if (drawMode != DrawMode.TectonicMesh)
         {
-            heightMap = Noise.GenerateNoiseMap(mapWidth, mapDepth, seed, sampleScale, octaves, persistance, lacunarity, offsets);
+            heightMap = Noise.GenerateNoiseMap(mapWidth, mapDepth, seed, sampleScale, 0, persistance, lacunarity, offsets);
         } else
         {
             heightMap = Noise.GenerateNoiseMap(mapWidth, mapDepth, seed, sampleScale, 0, persistance, lacunarity, offsets);
