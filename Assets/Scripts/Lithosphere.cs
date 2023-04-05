@@ -63,6 +63,12 @@ public class Lithosphere : MonoBehaviour
 
     List<MagmaChamber> magmaChamberList = new List<MagmaChamber>();
 
+
+    //Set up references to UI controlers
+    public UIControlStatus statusUI;
+    public UIControlSettings settingsUI;
+
+
     private void Awake()
     {
         GenerateSurface();
@@ -93,6 +99,10 @@ public class Lithosphere : MonoBehaviour
 
         if (smoothOnly)
         {
+            //make sure UI is broadcasting correct Status
+            statusUI.UpdateStatus("smoothing");
+            settingsUI.Hide();
+
             stepGeneration = false;
             heightMap = SmoothTerrain(heightMap);
 
@@ -129,6 +139,10 @@ public class Lithosphere : MonoBehaviour
         
         if (stepGeneration) 
         {
+            //make sure UI is broadcasting correct Status
+            statusUI.UpdateStatus("running");
+            settingsUI.Hide();
+
             //Begin processing Tectonic Effects
             heightMap = ProcessTectonicEffects(heightMap);
 
@@ -161,6 +175,13 @@ public class Lithosphere : MonoBehaviour
 
             //Display world data
             display.DrawMesh(MeshGenerator.GenerateTerrainMesh(heightMap, meshHeightMultiplier, meshHeightCurve), TextureGenerator.TextureFromColourMap(colourMap, mapWidth, mapDepth));
+        }
+
+        if (!stepGeneration && !smoothOnly)
+        {
+            //make sure UI is broadcasting correct Status
+            statusUI.UpdateStatus("idle");
+            settingsUI.Show();
         }
 
     }
